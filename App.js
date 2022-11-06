@@ -24,7 +24,7 @@ app.get('/set',(req,res)=>
     let seconds = date_ob.getSeconds();
     console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
     console.log(hours + ":" + minutes);
-    return res.send("get_data");
+    return res.send("get_data")
 })
 app.listen(port,()=>
 {
