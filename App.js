@@ -17,20 +17,24 @@ app.set('views',"views")
   
 app.get('/',(req,res)=>
 {
-    const info=[]
+    
     async function getData()
   {
-    let data=[]
-    let result = await collection.find({ "name" : { $exists : true }}).toArray();
+    var info=[]
+   
+    let result = await collection.find({}).toArray();
     for(let i=0;i<result.length;i++)
     {
+        let data={}
         data["name"]=result[i].name;
         data["no"]=result[i].enrollmentNo;
         data["date"]=result[i].date;
+        
         info.push(data);
+        console.log(info);
     }
-    console.log(info);
-    res.render("index",{info:info})
+    
+    res.render("index",{"info":info})
   }
    getData();
 })
