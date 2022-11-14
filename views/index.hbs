@@ -14,12 +14,14 @@
             <th>Name</th>
             <th>Enrollment No</th>
             <th>Date</th>
+            <th>Status</th>
         </tr>
           {{#each info}}
         <tr >
             <td align ="center">{{this.name}}</td>
             <td align="center">{{this.no}}</td>
             <td align="center">{{this.date}}</td>
+            <td align="center">{{this.check}}</td>
         </tr>
         {{/each}}
     </table>

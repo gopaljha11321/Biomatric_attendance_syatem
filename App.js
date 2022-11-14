@@ -11,13 +11,13 @@ const app =express()
 const port =process.env.PORT||3000
 const db = client.db(dbName);
 const collection =db.collection('students')
+const collection2=db.collection('deatils')
 let date_ob = new Date();
+// collection.deleteMany()
 app.set('view engine', 'hbs')
 app.set('views',"views")
-  
 app.get('/',(req,res)=>
 {
-    
     async function getData()
   {
     var info=[]
@@ -29,11 +29,16 @@ app.get('/',(req,res)=>
         data["name"]=result[i].name;
         data["no"]=result[i].enrollmentNo;
         data["date"]=result[i].date;
+        if(result[i].status==="present")
+        {
+            data["check"]="LogIn"
+        }
+        else{
+            data["check"]="LogOut"
+        }
         
         info.push(data);
-        console.log(info);
     }
-    
     res.render("index",{"info":info})
   }
    getData();
@@ -48,8 +53,34 @@ app.get('/set',(req,res)=>
     let minutes = date_ob.getMinutes();
     let seconds = date_ob.getSeconds();
     console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
-    const insertResult = collection.insertOne({"name":req.query.name,"enrollmentNo":req.query.no,date:(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds)});
-    return res.send("set_data")
+    getdetail=async (num)=>
+    {
+        let result = await collection2.find({id:Number(num)}).toArray();
+    if(result.length>0)
+    {
+        if(typeof(result[0]["present"])==="undefined" ||result[0]["present"]===false)
+        {
+            let data1=result[0];
+            data1["present"]=true;
+            collection2.updateOne({id:Number(num)},{$set: data1})
+            const insertResult = collection.insertOne({"name":result[0]["name"],"status":"present","enrollmentNo":num,date:(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds)});
+            return res.send(`Welcome ${result[0].name}`)  
+        }
+        else {
+            let data1=result[0];
+            data1["present"]=false;
+           collection2.updateOne({id:Number(num)},{$set: data1})
+            const insertResult = collection.insertOne({"name":result[0]["name"],"status":"absent","enrollmentNo":num,date:(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds)});
+            return res.send(`Thanks for coming ${result[0].name}`)
+        }
+    }
+    else{
+        return res.send(`use not found on id: ${num}`)
+    }  
+  
+    }
+    getdetail(req.query.no);
+    
 })
 app.listen(port,()=>
 {
@@ -70,8 +101,7 @@ app.listen(port,()=>
 //  const insertResult = collection.insertOne({_id:252, name:"ram",
 // age: 19,mobile: "9871436400" });
 
-//deletion on atlas
-// collection.deleteMany()
+
 // collection2.deleteMany()
 
 //read from mongodb
