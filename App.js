@@ -85,25 +85,4 @@ app.get('/set',(req,res)=>
 app.listen(port,()=>
 {
     console.log("server_start");
-})
-//mongodb+srv://gopaljha:jhaji9871436400@cluster0.n70vgmg.mongodb.net/project_ai?retryWrites=true&w=majority
-
-// const client= new mongo(url,(err)=>
-// {
-//     if(err) throw err;
-// })
-// client.connect()
-// console.log("connection done")
-// const db = client.db(dbName);
-// const collection =db.collection('Keywords')
-// const collection2 =db.collection('Answers')
-//insertion in atlas
-//  const insertResult = collection.insertOne({_id:252, name:"ram",
-// age: 19,mobile: "9871436400" });
-
-
-// collection2.deleteMany()
-
-//read from mongodb
-  
-// console.log("done delete")
+}
