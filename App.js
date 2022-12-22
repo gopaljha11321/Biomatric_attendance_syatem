@@ -13,7 +13,6 @@ const db = client.db(dbName);
 const collection =db.collection('students')
 const collection2=db.collection('deatils')
 let date_ob = new Date();
-// collection.deleteMany()
 app.set('view engine', 'hbs')
 app.set('views',"views")
 app.get('/',(req,res)=>
@@ -75,35 +74,24 @@ app.get('/set',(req,res)=>
         }
     }
     else{
-        return res.send(`use not found on id: ${num}`)
+        return res.send(`user not found on id: ${num}`)
     }  
   
     }
     getdetail(req.query.no);
     
 })
+app.get('/delete_all',(req,res)=>
+{
+    let code=req.query['code'];
+    if(code==="gopaljha11321")
+    {
+        collection.deleteMany()
+    return res.send("All data deleted ")
+    }
+    return res.send("Wrong access code!!")
+})
 app.listen(port,()=>
 {
     console.log("server_start");
 })
-//mongodb+srv://gopaljha:jhaji9871436400@cluster0.n70vgmg.mongodb.net/project_ai?retryWrites=true&w=majority
-
-// const client= new mongo(url,(err)=>
-// {
-//     if(err) throw err;
-// })
-// client.connect()
-// console.log("connection done")
-// const db = client.db(dbName);
-// const collection =db.collection('Keywords')
-// const collection2 =db.collection('Answers')
-//insertion in atlas
-//  const insertResult = collection.insertOne({_id:252, name:"ram",
-// age: 19,mobile: "9871436400" });
-
-
-// collection2.deleteMany()
-
-//read from mongodb
-  
-// console.log("done delete")
