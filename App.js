@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser=require('body-parser')
 var hbs = require('hbs')
 const mongo  = require('mongodb').MongoClient;
 const url = 'mongodb+srv://gopaljha:jhaji9871436400@cluster0.n70vgmg.mongodb.net/attendance_system?retryWrites=true&w=majority';
@@ -12,15 +13,27 @@ const port =process.env.PORT||3000
 const db = client.db(dbName);
 const collection =db.collection('students')
 const collection2=db.collection('deatils')
-let date_ob = new Date();
+const collection3=db.collection('admin')
 app.set('view engine', 'hbs')
 app.set('views',"views")
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname+"/public"));
 app.get('/',(req,res)=>
 {
+    res.render("home")
+})
+app.post('/home',(req,res)=>
+{
+    
     async function getData()
   {
+    let user = await collection3.find({email:req.body.email,password:req.body.password}).toArray();
+    if(user.length<1)
+    {
+        return res.send("Wrong password!!");
+    }
     var info=[]
-   
     let result = await collection.find({}).toArray();
     for(let i=0;i<result.length;i++)
     {
@@ -41,6 +54,10 @@ app.get('/',(req,res)=>
     res.render("index",{"info":info})
   }
    getData();
+})
+app.get("/test",(req,res)=>
+{
+    res.render("ui");
 })
 app.get('/set',(req,res)=>
 {

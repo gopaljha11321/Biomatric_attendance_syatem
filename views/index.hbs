@@ -4,27 +4,41 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akshay Bora</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>Table_Format</title>
 </head>
 <body>
-    <h1 align="center">Biometric Attendace System</h1> 
+    <div class="containee">
+      <h1>Student Biodata Form</h1>
+    </div>
+    <div class="btn-flex">
+      <button class="btn third">Download</button>
+    </div>
 
-    <table width="100%"  border="2px">
-        <tr>
-            <th>Name</th>
-            <th>Enrollment No</th>
-            <th>Date</th>
-            <th>Status</th>
-        </tr>
+    <input type="text" id="search" class="form-control"  placeholder="Search for name and email......">
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Enrollment No.</th>
+                <th>Date and time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="table">
           {{#each info}}
         <tr >
-            <td align ="center">{{this.name}}</td>
-            <td align="center">{{this.no}}</td>
-            <td align="center">{{this.date}}</td>
-            <td align="center">{{this.check}}</td>
+            <td data-column="First Name"  align ="center" id="title">{{this.name}}</td>
+            <td data-column="Enrollment No." align="center">{{this.no}}</td>
+            <td data-column="Date and time"  class="dateAndtime" align="center">{{this.date}}</td>
+            <td data-column="Status" align="center">{{this.check}}</td>
         </tr>
         {{/each}}
+        </tbody>
     </table>
 
+    <script src="/js/script.js"></script>
 </body>
 </html>
