@@ -51,7 +51,7 @@ app.post('/home',(req,res)=>
         
         info.push(data);
     }
-    res.render("index",{"info":info})
+    res.render("index",{"info":info,"name":user[0].name})
   }
    getData();
 })
@@ -61,14 +61,15 @@ app.get("/test",(req,res)=>
 })
 app.get('/set',(req,res)=>
 {
-    let date_ob = new Date();
-    let date = ("0" + date_ob.getDate()).slice(-2);
-    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-    let year = date_ob.getFullYear();
-    let hours = date_ob.getHours();
-    let minutes = date_ob.getMinutes();
-    let seconds = date_ob.getSeconds();
-    console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
+var today = new Date();
+var day = today.getDay();
+var date = today.getDate() +'-'+(today.getMonth()+1)+'-'+ today.getFullYear();
+var hours = today.getHours();
+var AmOrPm = hours >= 12 ? 'pm' : 'am';
+hours = (hours % 12) || 12;
+var time = hours + ":" + today.getMinutes() + ":" + today.getSeconds();
+var dateTime = date+'  --  '+time;
+const final_time=dateTime+ " " + AmOrPm;
     getdetail=async (num)=>
     {
         let result = await collection2.find({id:Number(num)}).toArray();
@@ -79,24 +80,22 @@ app.get('/set',(req,res)=>
             let data1=result[0];
             data1["present"]=true;
             collection2.updateOne({id:Number(num)},{$set: data1})
-            const insertResult = collection.insertOne({"name":result[0]["name"],"status":"present","enrollmentNo":num,date:(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds)});
+            const insertResult = collection.insertOne({"name":result[0]["name"],"status":"present","enrollmentNo":num,date:final_time});
             return res.send(`Welcome ${result[0].name}`)  
         }
         else {
             let data1=result[0];
             data1["present"]=false;
            collection2.updateOne({id:Number(num)},{$set: data1})
-            const insertResult = collection.insertOne({"name":result[0]["name"],"status":"absent","enrollmentNo":num,date:(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds)});
+            const insertResult = collection.insertOne({"name":result[0]["name"],"status":"absent","enrollmentNo":num,date:final_time});
             return res.send(`Thanks for coming ${result[0].name}`)
         }
     }
     else{
         return res.send(`user not found on id: ${num}`)
     }  
-  
     }
     getdetail(req.query.no);
-    
 })
 app.get('/delete_all',(req,res)=>
 {
