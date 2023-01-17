@@ -17,9 +17,11 @@
         <i class="fa-solid fa-user"></i>
         <span>{{name}}</span>
       </div>
-      <button class="btn third">Download</button>
+      <form action="/csv_download" method="get">
+      <input type="hidden" name="name" value={{name}}>
+      <button class="btn third" type="submit">Download</button>
+      </form>
     </div>
-
     <input type="text" id="search" class="form-control"  placeholder="Search for name and email......">
     
     <table>

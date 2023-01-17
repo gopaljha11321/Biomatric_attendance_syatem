@@ -1,7 +1,9 @@
 const express = require('express');
-const bodyParser=require('body-parser')
+const bodyParser=require('body-parser');
+var { Parser } = require('json2csv')
 var hbs = require('hbs')
 const mongo  = require('mongodb').MongoClient;
+const fs = require("fs");
 const url = 'mongodb+srv://gopaljha:jhaji9871436400@cluster0.n70vgmg.mongodb.net/attendance_system?retryWrites=true&w=majority';
 const client= new mongo(url,(err)=>
 {
@@ -106,6 +108,37 @@ app.get('/delete_all',(req,res)=>
     return res.send("All data deleted ")
     }
     return res.send("Wrong access code!!")
+})
+app.get("/csv_download",async(req,res)=>
+{
+    const fields = ['Name', 'Enrollmment No.','Date and time','status'];
+    let result = await collection.find({}).toArray();
+    const myData=[]
+    for(let i=0;i<result.length;i++)
+    {
+        let data={}
+        data["Name"]=result[i].name;
+        data["Enrollmment No."]=result[i].enrollmentNo;
+        data["Date and time"]=result[i].date;
+        if(result[i].status==="present")
+        {
+            data["status"]="LogIn"
+        }
+        else{
+            data["status"]="LogOut"
+        }
+        
+        myData.push(data);
+    }
+    const opts = { fields,data:myData };
+    try {
+      const parser = new Parser(opts);
+      const csv = parser.parse(myData);
+        res.attachment(`${req.query['name']}.csv`);
+        res.status(200).send(csv);
+    } catch (err) {
+      console.error(err);
+    }
 })
 app.listen(port,()=>
 {
