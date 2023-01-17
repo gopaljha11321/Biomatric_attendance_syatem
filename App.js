@@ -102,7 +102,7 @@ const final_time=dateTime+ " " + AmOrPm;
 app.get('/delete_all',(req,res)=>
 {
     let code=req.query['code'];
-    if(code==="gopaljha11321")
+    if(code==="akshay16")
     {
         collection.deleteMany()
     return res.send("All data deleted ")
